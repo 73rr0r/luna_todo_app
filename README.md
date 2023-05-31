@@ -1,6 +1,4 @@
-# 🛸 luna_todo_app
-
-## Template project created with [🌘 Luna](https://github.com/LunatiqueCoder/luna)
+# 🛸 73rr0r React Native Todo App 🌘
 
 > ⚠️ [Please be sure your environment is set up correctly for React Native.][26]
 
