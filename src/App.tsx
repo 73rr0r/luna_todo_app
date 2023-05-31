@@ -19,7 +19,6 @@ import {
   DrawerHeaderProps,
 } from '@react-navigation/drawer';
 import {Home} from './features/Home';
-import {Logo} from './components/Logo';
 import config from '../tamagui';
 import {UserDetailScreen} from './features/DetailScreen';
 
@@ -31,8 +30,7 @@ const Header = ({route}: DrawerHeaderProps) => {
   return (
     <SafeAreaView style={styles.headerContainer}>
       <DrawerToggleButton tintColor={theme.color?.val} />
-      <Stack ai="center" jc={'space-between'} fd={'row'} f={1}>
-        <Logo />
+      <Stack ai="center" jc={'center'} fd={'row'} f={1}>
         <H4 fontFamily={'$silkscreen'} pr={'$7'}>
           {route.name.toUpperCase()}
         </H4>
@@ -66,7 +64,7 @@ const TopTabNavigator = () => {
 };
 
 const linking = {
-  prefixes: ['criszz77.github.io/luna', 'localhost'],
+  prefixes: ['73rr0r.github.io/luna_todo_app', 'localhost'],
   config: {
     screens: {
       home: '',
@@ -98,9 +96,9 @@ const InnerApp = () => {
 };
 
 const App = () => {
-  const theme = useColorScheme() || 'light';
+  const theme = useColorScheme() || 'dark';
   return (
-    <SolitoImageProvider nextJsURL="https://luna-gamma.vercel.app/">
+    <SolitoImageProvider nextJsURL="http://localhost:3000/">
       <TamaguiProvider config={config} disableInjectCSS defaultTheme={theme}>
         <InnerApp />
       </TamaguiProvider>
@@ -115,14 +113,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  logo: {
-    flex: 1,
-  },
-  logoContainer: {
-    flex: 1,
-    height: 50,
-    width: 50,
   },
   routeName: {
     flex: 1,

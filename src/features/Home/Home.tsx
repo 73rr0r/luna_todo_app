@@ -14,38 +14,20 @@ import {useLink} from 'solito/link';
 
 export function Home() {
   const linkProps = useLink({
-    href: '/user/nate',
+    href: '/user/73rr0r',
   });
 
   return (
     <YStack f={1} jc="center" ai="center" p="$4" space>
       <YStack space="$4" maw={600}>
         <H1 ta="center" fontFamily={'$silkscreen'}>
-          Welcome to Tamagui.
+          Welcome to 73rr0r Smart Notes.
         </H1>
         <Paragraph ta="center">
-          Here&apos;s a basic starter to show navigating from one screen to
-          another. This screen uses the same code on Next.js and React Native.
+          Here&apos;s a basic home page, here should be your notes in future.
         </Paragraph>
 
         <Separator />
-        <Paragraph ta="center">
-          Made by{' '}
-          <Anchor
-            color="$color12"
-            href="https://twitter.com/natebirdman"
-            target="_blank">
-            @natebirdman
-          </Anchor>
-          ,{' '}
-          <Anchor
-            color="$color12"
-            href="https://github.com/tamagui/tamagui"
-            target="_blank"
-            rel="noreferrer">
-            give it a ⭐️
-          </Anchor>
-        </Paragraph>
       </YStack>
 
       <XStack>

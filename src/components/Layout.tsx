@@ -8,7 +8,6 @@ import {
   AnimatePresence,
 } from 'tamagui';
 import {Menu} from '@tamagui/lucide-icons';
-import {Logo} from './Logo';
 
 interface ILayout {
   children: ReactNode;
@@ -75,7 +74,6 @@ export const Layout = ({children}: ILayout) => {
           animation={'quick'}
           onPress={toggleMenu}
         />
-        <Logo />
       </XStack>
       <YStack height={54} w="100%" />
       {children}
