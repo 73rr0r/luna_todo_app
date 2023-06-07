@@ -1,13 +1,5 @@
 import {useState} from 'react';
-import {
-  Button,
-  H1,
-  Paragraph,
-  Separator,
-  Sheet,
-  XStack,
-  YStack,
-} from 'tamagui';
+import {Button, H1, Paragraph, Separator, Sheet, XStack, YStack} from 'tamagui';
 import {ChevronDown, ChevronUp} from '@tamagui/lucide-icons';
 import {useLink} from 'solito/link';
 

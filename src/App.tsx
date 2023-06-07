@@ -1,175 +1,147 @@
-import {StyleSheet, StatusBar, useColorScheme} from 'react-native';
+import {StatusBar, StyleSheet, useColorScheme} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {
-    TamaguiProvider,
-    useTheme,
-    Stack,
-    H4,
-    Select,
-    SelectProps,
-    YStack,
-    Label,
-    Switch,
-    XStack,
-    SizeTokens,
-    Adapt,
-    Sheet,
-    Separator,
-    getFontSize,
-} from 'tamagui';
+import {Button, H4, Stack, TamaguiProvider, useTheme} from 'tamagui';
 import {SolitoImageProvider} from 'solito/image';
 import {
-    initialWindowMetrics,
-    SafeAreaProvider,
-    SafeAreaView,
+  initialWindowMetrics,
+  SafeAreaProvider,
+  SafeAreaView,
 } from 'react-native-safe-area-context';
 import {
-    DefaultTheme,
-    NavigationContainer,
-    DarkTheme,
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
 } from '@react-navigation/native';
 import {
-    createDrawerNavigator,
-    DrawerToggleButton,
-    DrawerNavigationOptions,
-    DrawerHeaderProps,
+  createDrawerNavigator,
+  DrawerHeaderProps,
+  DrawerNavigationOptions,
+  DrawerToggleButton,
 } from '@react-navigation/drawer';
 import {Home} from './features/Home';
 import config from '../tamagui';
 import {UserDetailScreen} from './features/DetailScreen';
-import {useState} from 'react';
-import {ChevronDown, ChevronUp, Check} from '@tamagui/lucide-icons';
-import {useRootTheme, useThemeSetting} from "@tamagui/next-theme";
+import {Dispatch, SetStateAction, useState} from 'react';
+import {Moon, Sun} from '@tamagui/lucide-icons';
 
 const Drawer = createDrawerNavigator();
-const themes = [
-    {name: 'dark'},
-    {name: 'light'},
-];
 
-export function SwitchWithLabel(props: {
-    placeholder: string;
-    size: SizeTokens;
-    onChange: any;
-}) {
-    const id = `switch-${props.size.toString().slice(1)}`
-    return (
-        <XStack width={200} alignItems="center" space="$1">
-            <Label
-                paddingRight="$0"
-                minWidth={90}
-                justifyContent="flex-end"
-                size={props.size}
-                htmlFor={id}
-            >
-                Dark mode {props.placeholder}
-            </Label>
-            <Separator minHeight={20} vertical/>
-            <Switch id={id} size={props.size} onCheckedChange={props.onChange()}>
-                <Switch.Thumb animation="quick"/>
-            </Switch>
-        </XStack>
-    )
+interface ThemeProps {
+  defaultTheme: string;
+  setTheme: Dispatch<SetStateAction<'light' | 'dark'>>;
 }
 
-const Header = ({route}: DrawerHeaderProps) => {
-    const theme = useTheme()
-    // const {current, toggle} = useThemeSetting();
-    // const [currentTheme, setTheme] = useRootTheme();
-
-    return (
-        <SafeAreaView style={styles.headerContainer}>
-            <DrawerToggleButton tintColor={theme.color?.val}/>
-            <Stack ai="center" jc={'space-between'} fd={'row'} f={1}>
-                <H4 fontFamily={'$silkscreen'} pr={'$7'}>
-                    {route.name.toUpperCase()}
-                </H4>
-                {/*<SwitchWithLabel placeholder={currentTheme} size={'$2'} onChange={setTheme}/>*/}
-            </Stack>
-        </SafeAreaView>
-    );
+const ThemeToggle = ({defaultTheme, setTheme}: ThemeProps) => {
+  const isDarkTheme = defaultTheme === 'dark';
+  return (
+    <Button
+      unstyled
+      m={'$1'}
+      icon={isDarkTheme ? <Moon size={'$2'} /> : <Sun size={'$2'} />}
+      onPress={() => setTheme(isDarkTheme ? 'light' : 'dark')}
+    />
+  );
 };
 
-const screenOptions: DrawerNavigationOptions = {
-    header: props => <Header {...props} />,
+const Header = ({
+  route,
+  defaultTheme,
+  setTheme,
+}: DrawerHeaderProps & ThemeProps) => {
+  const theme = useTheme();
+
+  return (
+    <SafeAreaView style={styles.headerContainer}>
+      <DrawerToggleButton tintColor={theme.color?.val} />
+      <Stack ai="center" jc={'space-between'} fd={'row'} f={1}>
+        <H4 fontFamily={'$silkscreen'} pr={'$7'}>
+          {route.name.toUpperCase()}
+        </H4>
+        <ThemeToggle defaultTheme={defaultTheme} setTheme={setTheme} />
+      </Stack>
+    </SafeAreaView>
+  );
 };
 
-const TopTabNavigator = () => {
-    return (
-        <Drawer.Navigator initialRouteName="home" screenOptions={screenOptions}>
-            <Drawer.Screen
-                component={Home}
-                key={'home'}
-                name={'home'}
-                options={{title: 'Home'}}
-            />
-            <Drawer.Screen
-                name="user-detail"
-                component={UserDetailScreen}
-                options={{
-                    title: 'User',
-                }}
-            />
-        </Drawer.Navigator>
-    );
+const TopTabNavigator = ({defaultTheme, setTheme}: ThemeProps) => {
+  const screenOptions: DrawerNavigationOptions = {
+    header: props => (
+      <Header {...props} defaultTheme={defaultTheme} setTheme={setTheme} />
+    ),
+  };
+  return (
+    <Drawer.Navigator initialRouteName="home" screenOptions={screenOptions}>
+      <Drawer.Screen
+        component={Home}
+        key={'home'}
+        name={'home'}
+        options={{title: 'Home'}}
+      />
+      <Drawer.Screen
+        name="user-detail"
+        component={UserDetailScreen}
+        options={{
+          title: 'User',
+        }}
+      />
+    </Drawer.Navigator>
+  );
 };
 
-const linking = {
+const InnerApp = ({defaultTheme, setTheme}: ThemeProps) => {
+  const linking = {
     prefixes: ['73rr0r.github.io/luna_todo_app', 'localhost'],
     config: {
-        screens: {
-            home: '',
-            'user-detail': 'user/:id',
-        },
+      screens: {
+        home: '',
+        'user-detail': 'user/:id',
+      },
     },
-};
+  };
+  const isDarkMode = defaultTheme === 'dark';
+  const theme = useTheme();
 
-const InnerApp = () => {
-    const colorScheme = useColorScheme() || 'dark';
-    const isDarkMode = colorScheme === 'dark';
-    const theme = useTheme();
-
-    return (
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <GestureHandlerRootView style={styles.container}>
-                <StatusBar
-                    backgroundColor={theme.borderColor?.val}
-                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                />
-                <NavigationContainer
-                    theme={isDarkMode ? DarkTheme : DefaultTheme}
-                    linking={linking}>
-                    <TopTabNavigator/>
-                </NavigationContainer>
-            </GestureHandlerRootView>
-        </SafeAreaProvider>
-    );
+  return (
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <GestureHandlerRootView style={styles.container}>
+        <StatusBar
+          backgroundColor={theme.borderColor?.val}
+          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        />
+        <NavigationContainer
+          theme={isDarkMode ? DarkTheme : DefaultTheme}
+          linking={linking}>
+          <TopTabNavigator defaultTheme={defaultTheme} setTheme={setTheme} />
+        </NavigationContainer>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
+  );
 };
 
 const App = () => {
-    const theme = useColorScheme() || 'dark';
-    return (
-        <SolitoImageProvider nextJsURL="http://localhost:3000/">
-            <TamaguiProvider config={config} disableInjectCSS defaultTheme={theme}>
-                <InnerApp/>
-            </TamaguiProvider>
-        </SolitoImageProvider>
-    );
+  const [theme, setTheme] = useState(useColorScheme() || 'dark');
+  return (
+    <SolitoImageProvider nextJsURL="http://localhost:3000/">
+      <TamaguiProvider config={config} disableInjectCSS defaultTheme={theme}>
+        <InnerApp defaultTheme={theme} setTheme={setTheme} />
+      </TamaguiProvider>
+    </SolitoImageProvider>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    routeName: {
-        flex: 1,
-        textAlign: 'right',
-        marginRight: 15,
-    },
+  container: {
+    flex: 1,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  routeName: {
+    flex: 1,
+    textAlign: 'right',
+    marginRight: 15,
+  },
 });
 
 export default App;

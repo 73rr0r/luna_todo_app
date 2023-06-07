@@ -67,3 +67,5 @@ build/
 .next
 .expo
 dist/
+
+tsconfig.tsbuildinfo
