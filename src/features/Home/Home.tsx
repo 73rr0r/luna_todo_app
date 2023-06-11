@@ -12,7 +12,7 @@ export function Home() {
     <YStack f={1} jc="center" ai="center" p="$4" space>
       <YStack space="$4" maw={600}>
         <H1 ta="center" fontFamily={'$silkscreen'}>
-          Welcome to 73rr0r Smart Notes.
+          Welcome to Smart Notes.
         </H1>
         <Paragraph ta="center">
           Here&apos;s a basic home page, here should be your notes in future.
